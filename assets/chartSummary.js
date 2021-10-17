@@ -12,7 +12,6 @@ var myChart = new Chart(ctx, {
     options: {
         responsive: true,
         scales: {
-            x: {},
             yAxes: {
                 type: 'time',
                 time: {
@@ -41,8 +40,6 @@ for (let projectKey in projects) {
     }
     if (!myChart.data.labels.includes(projectDate) && myChart.data.labels.length > 0) {
         myChart.data.labels.push(projectDate);
-        console.log(data.data,  myChart.data.labels.length  )
-
         data.data.push({x: projectDate, y: projects[projectKey].timeOfProject[0]});
         myChart.data.datasets.push(data);
     } else if (myChart.data.labels.length < 1) {
