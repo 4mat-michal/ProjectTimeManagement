@@ -19,6 +19,14 @@ class ProjectReportRepository extends ServiceEntityRepository
         parent::__construct($registry, ProjectTime::class);
     }
 
+    public function findByDate()
+    {
+        return $this->createQueryBuilder('date')
+            ->orderBy('date.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ProjectReport[] Returns an array of ProjectReport objects
     //  */

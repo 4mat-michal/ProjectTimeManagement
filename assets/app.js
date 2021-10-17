@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Timer from './Timer';
 import './styles/app.css';
+import Chart from './chartSummary'
 
 
 new Vue({
