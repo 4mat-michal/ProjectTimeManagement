@@ -31,6 +31,7 @@ class ProjectTimeController extends AbstractController
 
     /**
      * @Route("/app/project/new", name="project_time_new")
+     * @throws \Exception
      */
     public function new(Request $request, SerializerInterface $serializer): Response
     {
@@ -54,9 +55,15 @@ class ProjectTimeController extends AbstractController
             $projectTime->setTimeOfProject([$content->newTime]);
             $this->entityManager->persist($projectTime);
             $this->entityManager->flush();
+        }else if(isset($content->newDate)){
+            $project = $this->entityManager->getRepository(ProjectTime::class)->find($content->id);
+            /** @var ProjectTime $project */
+            $project->setCreatedAt(new \DateTimeImmutable($content->newDate));
+            $this->entityManager->persist($project);
+            $this->entityManager->flush();
         }
+            $project = new Project();
 
-        $project = new Project();
 
         $projectsTime = $this->entityManager->getRepository(ProjectTime::class)->findAll();
         $projectsTimeJson = $serializer->serialize($projectsTime, 'json', ['groups' => 'show_project']);

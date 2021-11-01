@@ -2,7 +2,7 @@
   <div class="container">
     <div class="d-inline-flex  justify-content-center timer-box">
       <form name="project_time" method="post" class="d-inline-flex">
-        <div class="me-3"><input v-on:keyup.enter="startTime" id="project_name" name="project[name]" required="required"
+        <div class="me-3"><input  id="project_name" name="project[name]" required="required"
                                  class="input-group-text form-control project-name-input "
                                  placeholder="project name"></div>
         <div class="time-hours" ref="hours">00:</div>
@@ -18,7 +18,7 @@
             <a class="btn btn-dark me-2" type="submit" ref="pause-button" @click="pauseTime">Pause</a>
           </div>
           <div>
-            <button class="btn btn-dark me-2" name="project_time[save]" ref="stop-button" @click="stopTime"
+            <button  class="btn btn-dark me-2" name="project_time[save]" ref="stop-button" @click="stopTime"
                     type="submit">Stop
             </button>
           </div>
@@ -30,7 +30,7 @@
     </div>
     <div class="list-group" ref="list-group" v-for="(projects,key) in projectsData">
       <div class="project-display">
-        <p class="date-display">{{ projects.date }}</p>
+        <input class="date-display" @change="editDate(projects.id)" v-bind:value="projects.date" />
         <div class="d-inline-flex project-content-box">
           <div class="list-group-item list-group-item-action">
             <a @click="showChildProjects(projects.name,projects.date, projects.id)"
@@ -77,7 +77,7 @@ export default {
       minutes: '00',
       seconds: '',
       timer: null,
-      time: '',
+      time: '00:00:00',
       projectsData: [],
       projectDate: '',
       todayDate: '',
@@ -163,9 +163,9 @@ export default {
             this.hours = this.hours < 10 ? '0' + this.hours : this.hours;
             hours.innerHTML = this.hours + ":"
           }
-          this.time = this.hours + ":" + this.minutes + ":" + this.seconds;
           this.seconds++;
           this.seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
+          this.time = this.hours + ":" + this.minutes + ":" + this.seconds;
           seconds.innerHTML = this.seconds;
         }, 1000)
       }
@@ -177,6 +177,7 @@ export default {
     },
     stopTime: function () {
       //pass the time to the input
+      console.log(this.time)
       this.$refs["time-of-project"].value = this.time
       clearInterval(this.timer);
       this.resetTime()
@@ -230,12 +231,16 @@ export default {
       window.location.reload();
     },
     editName: function (projectName, projectDate, event) {
+      console.log(projectName);
       event.preventDefault();
       axios.post('/app/project/new', {projectName: projectName, projectDate: projectDate, newName: event.target.value})
     },
     editTime: function (event) {
       axios.post('/app/project/new', {projectId: event.target.dataset.id, newTime: event.target.value})
     },
+    editDate: function (id){
+      axios.post('/app/project/new', {id: id, newDate: event.target.value})
+    }
 
   }
 }
