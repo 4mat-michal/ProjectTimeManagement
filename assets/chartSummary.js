@@ -15,7 +15,8 @@ window.addEventListener('load', function () {
         options: {
             responsive: true,
             scales: {
-                yAxes: {
+                y: {
+                    min: '00:00:00',
                     type: 'time',
                     time: {
                         parser: 'HH:mm:ss',
